@@ -26,11 +26,11 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'user'
         ]);
 
         return response()->json([
-            'message' => 'Register berhasil',
-            'data' => $user
+            'message' => 'Register berhasil'
         ], 201);
     }
 

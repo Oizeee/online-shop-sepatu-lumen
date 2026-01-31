@@ -40,12 +40,20 @@ $router->get('/orders/{id}', 'OrderController@show');
 */
 $router->group(['middleware' => 'auth'], function () use ($router) {
 
-    // Category
-    $router->post('/categories', 'CategoryController@store');
-
-    // Product
-    $router->post('/products', 'ProductController@store');
-
     // Order
     $router->post('/orders', 'OrderController@store');
+
+    /*
+       |--------------------------------------------------------------------------
+       | ADMIN ONLY
+       |--------------------------------------------------------------------------
+       */
+    $router->group(['middleware' => 'admin'], function () use ($router) {
+
+        // Category
+        $router->post('/categories', 'CategoryController@store');
+
+        // Product
+        $router->post('/products', 'ProductController@store');
+    });
 });
