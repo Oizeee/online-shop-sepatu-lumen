@@ -117,8 +117,16 @@ class OrderController extends Controller
         ]);
     }
 
-    public function markAsPaid($id)
+    public function markAsPaid(Request $request, $id)
     {
+        $user = $request->auth;
+
+        if ($user->role !== 'admin') {
+            return response()->json([
+                'message' => 'Forbidden'
+            ], 403);
+        }
+
         $order = Order::find($id);
 
         if (!$order) {
