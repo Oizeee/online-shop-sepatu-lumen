@@ -24,3 +24,6 @@ $router->post('/categories', 'CategoryController@store');
 
 $router->get('/products', 'ProductController@index');
 $router->post('/products', 'ProductController@store');
+
+$router->post('/orders', 'OrderController@store');
+$router->get('/orders/{id}', 'OrderController@show');
