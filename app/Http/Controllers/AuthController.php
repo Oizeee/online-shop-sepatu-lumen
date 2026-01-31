@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -43,9 +44,14 @@ class AuthController extends Controller
             ], 401);
         }
 
+        // generate token
+        $token = Str::random(60);
+        $user->api_token = $token;
+        $user->save();
+
         return response()->json([
             'message' => 'Login berhasil',
-            'user' => $user
+            'token' => $token
         ]);
     }
 }

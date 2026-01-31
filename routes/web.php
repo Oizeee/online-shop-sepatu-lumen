@@ -6,24 +6,46 @@
 |--------------------------------------------------------------------------
 | Application Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
-|
+| Public & Protected API Routes
+|--------------------------------------------------------------------------
 */
 
+// Default route
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+/*
+|--------------------------------------------------------------------------
+| AUTHENTICATION (PUBLIC)
+|--------------------------------------------------------------------------
+*/
 $router->post('/register', 'AuthController@register');
 $router->post('/login', 'AuthController@login');
 
+/*
+|--------------------------------------------------------------------------
+| PUBLIC API (NO AUTH REQUIRED)
+|--------------------------------------------------------------------------
+*/
 $router->get('/categories', 'CategoryController@index');
-$router->post('/categories', 'CategoryController@store');
-
 $router->get('/products', 'ProductController@index');
-$router->post('/products', 'ProductController@store');
-
-$router->post('/orders', 'OrderController@store');
+$router->get('/public/products', 'ProductController@publicIndex');
 $router->get('/orders/{id}', 'OrderController@show');
+
+/*
+|--------------------------------------------------------------------------
+| PROTECTED API (AUTH REQUIRED)
+|--------------------------------------------------------------------------
+*/
+$router->group(['middleware' => 'auth'], function () use ($router) {
+
+    // Category
+    $router->post('/categories', 'CategoryController@store');
+
+    // Product
+    $router->post('/products', 'ProductController@store');
+
+    // Order
+    $router->post('/orders', 'OrderController@store');
+});
